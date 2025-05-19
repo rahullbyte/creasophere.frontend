@@ -1,25 +1,35 @@
 import { useState } from 'react';
 
-const ChatInput = ({ onSubmit }: { onSubmit: (query: string) => void }) => {
-  const [query, setQuery] = useState('');
+type ChatInputProps = {
+  onSubmit: (query: string) => void;
+};
 
-  const handleSubmit = () => {
-    if (query.trim()) onSubmit(query.trim());
+const ChatInput = ({ onSubmit }: ChatInputProps) => {
+  const [input, setInput] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+    onSubmit(input.trim());
+    setInput('');
   };
 
   return (
-    <div className="flex flex-col gap-2 mb-6">
+    <form onSubmit={handleSubmit} className="flex">
       <input
         type="text"
-        className="border p-2 rounded"
-        placeholder="e.g. Analyze Wakad"
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
+        className="flex-grow border border-gray-300 rounded-l-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder="Ask something about real estate, e.g. 'Analyze Wakad area'"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
       />
-      <button onClick={handleSubmit} className="bg-blue-600 text-white p-2 rounded">
-        Submit
+      <button
+        type="submit"
+        className="bg-blue-600 text-white px-5 py-2 rounded-r-md hover:bg-blue-700 transition"
+      >
+        Analyze
       </button>
-    </div>
+    </form>
   );
 };
 
